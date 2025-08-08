@@ -1,0 +1,28 @@
+{
+  "name": "ai-dungeon-master",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=services/api-gateway\" \"npm run dev --workspace=services/rabbitmq\" \"npm run dev --workspace=services/game-engine\" \"npm run dev --workspace=services/ai-narrative\" \"npm run dev --workspace=services/memory-service\" \"npm run dev --workspace=services/player-service\" \"npm run dev --workspace=services/world-service\" \"npm run dev --workspace=services/knowledge-base-service\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "concurrently": "^9.2.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2"
+  },
+  "workspaces": [
+    "frontend",
+    "services/*",
+    "shared"
+  ]
+}
