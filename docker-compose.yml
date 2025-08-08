@@ -1,0 +1,56 @@
+# docker-compose для зовнішніх залежностей проєкту AI Dungeon Master
+# Коментарі українською, як домовлено, Пане Lex
+
+name: ai-dungeon-master
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: ai-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # RabbitMQ Management UI
+    environment:
+      # За замовчуванням. За потреби замініть через .env або змінні оточення
+      RABBITMQ_DEFAULT_USER: ai
+      RABBITMQ_DEFAULT_PASS: ai_pass
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - ai-network
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: ai-chromadb
+    restart: unless-stopped
+    ports:
+      - "8000:8000"  # HTTP API ChromaDB
+    # Для персистентності збережень колекцій
+    volumes:
+      - chroma-data:/chroma
+    environment:
+      # Можна налаштувати додатково через оточення за потреби
+      # CHROMA_SERVER_HOST: 0.0.0.0
+      # CHROMA_SERVER_HTTP_PORT: 8000
+      # ALLOW_RESET: "false"
+      # PERSIST_DIRECTORY: /chroma
+      TZ: UTC
+    networks:
+      - ai-network
+
+volumes:
+  rabbitmq-data:
+  chroma-data:
+
+networks:
+  ai-network:
+    driver: bridge
+
+

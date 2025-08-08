@@ -1,14 +1,14 @@
-# 7. Справочник по API и Событиям
+# 7. Довідник з API та Подій
 
-Этот документ описывает ключевые API-контракты и события, циркулирующие в системе через RabbitMQ.
+Цей документ описує ключові API-контракти та події, що циркулюють у системі через RabbitMQ.
 
-## Взаимодействие с LLM
+## Взаємодія з LLM
 
-### 1. Структурированный ответ (JSON)
+### 1. Структурована відповідь (JSON)
 
-Используется для генерации творческого контента. `ai-narrative-service` использует `response_format: { type: "json_object" }` и схему на Zod для валидации.
+Використовується для генерації творчого контенту. `ai-narrative-service` використовує `response_format: { type: "json_object" }` та схему на Zod для валідації.
 
-**Пример схемы ответа (Zod):**
+**Приклад схеми відповіді (Zod):**
 ```typescript
 const NarrativeResponseSchema = z.object({
   narration: z.string(),
@@ -20,11 +20,11 @@ const NarrativeResponseSchema = z.object({
 });
 ```
 
-### 2. Вызов Инструментов (Tool Calls)
+### 2. Виклик Інструментів (Tool Calls)
 
-Используется, когда LLM нужно выполнить действие, изменяющее мир. LLM не меняет состояние напрямую, а запрашивает вызов функции у `game-engine`.
+Використовується, коли LLM потрібно виконати дію, що змінює світ. LLM не змінює стан безпосередньо, а запитує виклик функції у `game-engine`.
 
-**Пример запроса от LLM:**
+**Приклад запиту від LLM:**
 ```json
 {
   "tool_calls": [{
@@ -34,33 +34,33 @@ const NarrativeResponseSchema = z.object({
 }
 ```
 
-## Схемы Баз Данных (SQLite / PostgreSQL)
+## Схеми Баз Даних (SQLite / PostgreSQL)
 
-**Таблица персонажей:**
+**Таблиця персонажів:**
 ```sql
 CREATE TABLE IF NOT EXISTS characters (
     id TEXT PRIMARY KEY,
     player_id TEXT,
     name TEXT NOT NULL,
     class TEXT,
-    stats TEXT -- JSON-строка
+    stats TEXT -- JSON-рядок
 );
 ```
 
-**Краткосрочная память:**
+**Короткострокова пам'ять:**
 ```sql
 CREATE TABLE IF NOT EXISTS short_term_memory (
     id TEXT PRIMARY KEY,
     session_id TEXT NOT NULL,
     event_type TEXT NOT NULL,
-    payload TEXT, -- JSON-строка
+    payload TEXT, -- JSON-рядок
     timestamp INTEGER NOT NULL
 );
 ```
 
-## Метаданные для Векторов (ChromaDB)
+## Метадані для Векторів (ChromaDB)
 
-Каждое сжатое воспоминание в ChromaDB имеет следующие метаданные для фильтрации:
+Кожен стиснутий спогад у ChromaDB має наступні метадані для фільтрації:
 
 ```json
 {

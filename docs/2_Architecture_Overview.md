@@ -1,19 +1,19 @@
-# 2. Обзор Архитектуры
+# 2. Огляд Архітектури
 
-Система представляет собой набор независимых микросервисов, взаимодействующих асинхронно через центральную шину событий (RabbitMQ). Это исключает прямые зависимости и "спагетти-код".
+Система є набором незалежних мікросервісів, що асинхронно взаємодіють через центральну шину подій (RabbitMQ). Це виключає прямі залежності та "спагетті-код".
 
-### Схема Высокого Уровня
+### Високорівнева Схема
 
 ```
-"Клиентская часть"
+"Клієнтська частина"
     Frontend[React App]
         ^
         | HTTP/WebSocket
         v
-"Backend Инфраструктура"
+"Backend Інфраструктура"
     Gateway[API Gateway / WebSocket] <--> Bus[RabbitMQ]
 
-"Игровые Сервисы" (Все подключены к RabbitMQ)
+"Ігрові Сервіси" (Всі підключені до RabbitMQ)
     - Engine[Game Engine]
     - World[World Service]
     - Player[Player Service]
@@ -21,24 +21,25 @@
     - Memory[Memory Service]
     - KBS[Knowledge Base Service]
 
-"Базы Данных"
+"Бази Даних"
     - SQLite (Player, World, Short-Term Memory)
     - ChromaDB (Vector Memory, Knowledge Base)
 ```
 
-### Детальное Описание Компонентов
+### Детальний Опис Компонентів
 
-*   **API Gateway (`api-gateway`):** Единая точка входа для клиентов. Управляет WebSocket-соединениями, аутентифицирует пользователей и публикует их действия в шину событий.
-*   **RabbitMQ (`rabbitmq`):** Центральная шина событий. Обеспечивает асинхронную коммуникацию между всеми сервисами по принципу "публикация-подписка".
-*   **Game Engine (`game-engine`):** Оркестратор игрового процесса. Не содержит бизнес-логики, а координирует запросы к другим сервисам в правильной последовательности.
-*   **Player Service (`player-service`):** Управляет данными игроков и их персонажей (профили, инвентарь, характеристики).
-*   **World Service (`world-service`):** Управляет состоянием игрового мира (локации, NPC, игровое время).
-*   **AI Narrative Service (`ai-narrative`):** Мозг ИИ. Генерирует описания, диалоги и сюжетные повороты, используя LLM (OpenAI/Anthropic). Возвращает ответ в строго структурированном JSON.
-*   **Memory Service (`memory-service`):** Решает проблему "амнезии" ИИ. Хранит краткосрочную память (последние события в SQLite) и долговременную (сжатые резюме в ChromaDB).
-*   **Knowledge Base Service (`kbs`):** Хранилище "истинных" знаний: правила игры, лор мира, кастомные механики. Предоставляет точный контекст для ИИ, предотвращая галлюцинации.
+*   **API Gateway (`api-gateway`):** Єдина точка входу для клієнтів. Керує WebSocket-з'єднаннями, автентифікує користувачів і публікує їхні дії в шину подій.
+*   **RabbitMQ (`rabbitmq`):** Центральна шина подій. Забезпечує асинхронну комунікацію між усіма сервісами за принципом "публікація-підписка".
+*   **Game Engine (`game-engine`):** Оркестратор ігрового процесу. Не містить бізнес-логіки, а координує запити до інших сервісів у правильній послідовності.
+*   **Player Service (`player-service`):** Керує даними гравців та їхніх персонажів (профілі, інвентар, характеристики).
+*   **World Service (`world-service`):** Керує станом ігрового світу (локації, NPC, ігровий час).
+*   **AI Narrative Service (`ai-narrative`):** Мозок ШІ. Генерує описи, діалоги та сюжетні повороти, використовуючи LLM (OpenAI/Anthropic). Повертає відповідь у строго структурованому JSON.
+*   **Memory Service (`memory-service`):** Вирішує проблему "амнезії" ШІ. Зберігає короткострокову пам'ять (останні події в SQLite) і довгострокову (стислі резюме в ChromaDB).
+*   **Knowledge Base Service (`kbs`):** Сховище "істинних" знань: правила гри, лор світу, кастомні механіки. Надає точний контекст для ШІ, запобігаючи галюцинаціям.
 
-### Поток Данных: Атака Игрока
+### Потік Даних: Атака Гравця
 
+```mermaid
 sequenceDiagram
     participant User
     participant Frontend
@@ -49,7 +50,7 @@ sequenceDiagram
     participant Memory
     participant AI
 
-    User->>Frontend: "Я атакую гоблина!"
+    User->>Frontend: "Я атакую гобліна!"
     Frontend->>Gateway: emit('player_action')
     Gateway->>Bus: publish('player.action')
 
@@ -69,9 +70,10 @@ sequenceDiagram
     AI-->>Bus: publish('narrative_response', {narration, tool_calls})
 
     Bus-->>Engine: deliver('narrative_response')
-    Engine->>Engine: (Выполняет tool_calls, обновляет мир через World/Player Service)
+    Engine->>Engine: (Виконує tool_calls, оновлює світ через World/Player Service)
     Engine->>Bus: publish('game.update', {final_narrative})
     
     Bus-->>Gateway: deliver('game.update')
     Gateway->>Frontend: emit('narrative_update')
-    Frontend->>User: "Ваш меч вонзается в гоблина!"
+    Frontend->>User: "Ваш меч вонзається в гобліна!"
+```
