@@ -110,3 +110,37 @@ npm run lint
 npm run format
 ```
 
+
+## Зовнішні залежності (Docker Compose)
+
+- **Файл**: `docker-compose.yml` у корені репозиторію.
+- **Сервіси**:
+  - **RabbitMQ**: порти `5672` (AMQP), `15672` (Management UI)
+  - **ChromaDB**: порт `8000` (HTTP API)
+
+### Запуск та керування
+
+```bash
+# Запустити зовнішні залежності у бекграунді
+docker compose up -d
+
+# Перевірити статус
+docker compose ps
+
+# Дивитися логи конкретного сервісу
+docker compose logs rabbitmq -f
+docker compose logs chromadb -f
+
+# Зупинити та прибрати ресурси (мережі/контейнери, але томи залишаться)
+docker compose down
+```
+
+### Доступ і підключення
+
+- **RabbitMQ UI**: `http://localhost:15672`
+  - логін/пароль: `ai` / `ai_pass`
+- **Рядки підключення**:
+  - AMQP: `amqp://ai:ai_pass@localhost:5672`
+  - ChromaDB HTTP: `http://localhost:8000`
+
+Примітка: дані зберігаються у персистентних томах (`rabbitmq-data`, `chroma-data`), мережа — `ai-network`. RabbitMQ має вбудований healthcheck.

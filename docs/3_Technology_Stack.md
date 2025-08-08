@@ -1,32 +1,32 @@
-# 3. Технологический Стек
+# 3. Технологічний Стек
 
 *   **Backend:**
-    *   **Язык:** TypeScript
-    *   **Среда выполнения:** Node.js 22
+    *   **Мова:** TypeScript
+    *   **Середовище виконання:** Node.js 22
     *   **Фреймворк:** Express.js
-    *   **Валидация:** Zod
+    *   **Валідація:** Zod
 
 *   **Frontend:**
     *   **Фреймворк:** React 19
-    *   **Сборщик:** Vite
-    *   **Язык:** TypeScript
-    *   **UI-библиотека:** MUI (Material-UI)
+    *   **Збирач:** Vite
+    *   **Мова:** TypeScript
+    *   **UI-бібліотека:** MUI (Material-UI)
 
 *   **Real-time Communication:**
     *   Socket.IO
 
-*   **Базы Данных:**
-    *   **Структурированные данные:** SQLite (локально), PostgreSQL (в production)
-    *   **Векторный поиск:** ChromaDB
-    *   **Кэш (в production):** Redis
+*   **Бази Даних:**
+    *   **Структуровані дані:** SQLite (локально)
+    *   **Векторний пошук:** ChromaDB
+    *   **Кеш (у production):** Redis
 
-*   **Инфраструктура и DevOps:**
-    *   **Шина событий:** RabbitMQ
-    *   **Контейнеризация:** Docker, Docker Compose
+*   **Інфраструктура та DevOps:**
+    *   **Шина подій:** RabbitMQ
+    *   **Контейнеризація:** Docker, Docker Compose
     *   **CI/CD:** GitHub Actions
-    *   **Мониторинг:** Prometheus, Grafana
+    *   **Моніторинг:** Prometheus, Grafana
 
-*   **Инструменты Качества Кода:**
-    *   **Линтер:** ESLint
-    *   **Форматтер:** Prettier
-    *   **Параллельный запуск:** concurrently
+*   **Інструменти Якості Коду:**
+    *   **Лінтинг:** ESLint
+    *   **Форматування:** Prettier
+    *   **Паралельний запуск:** concurrently
