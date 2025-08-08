@@ -110,6 +110,28 @@ npm run lint
 npm run format
 ```
 
+## Memory Service: короткострокова пам'ять (SQLite)
+
+- Схема таблиці `short_term_memory` створюється автоматично при старті репозиторію (`better-sqlite3`).
+- Репозиторій: `services/memory-service/src/repositories/SqliteEventRepository.ts` (реалізує `IRepository<ShortTermMemoryEvent>` + `getLastEvents`).
+- Менеджер: `services/memory-service/src/MemoryManager.ts` (`saveEvent`, `buildContext`).
+- Конфіг через env:
+  - `MEMORY_DB_PATH` — шлях до SQLite (`data/memory/short_term_memory.sqlite` за замовч.)
+  - `MEMORY_DEFAULT_CONTEXT_LIMIT` — дефолтний ліміт подій у контексті (за замовч. 20)
+  - `PORT` — порт локального smoke-сервера (лише для розробки)
+
+### Тести
+
+```bash
+# Запустити тести memory-service
+npm run -w services/memory-service test
+```
+
+Тестовий файл: `services/memory-service/src/__tests__/MemoryManager.test.ts` (node:test). Перевіряє:
+- збереження події та генерацію текстового контексту;
+- повернення останніх N подій у хронологічному порядку.
+
+
 
 ## Зовнішні залежності (Docker Compose)
 
