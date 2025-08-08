@@ -19,6 +19,9 @@
         "paths": {
             "@shared/*": [
                 "shared/src/*"
+            ],
+            "@shared/module": [
+                "shared/src/index.ts"
             ]
         }
     },

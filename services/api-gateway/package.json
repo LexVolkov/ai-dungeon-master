@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@shared/module": "1.0.0",
     "@types/socket.io": "^3.0.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",

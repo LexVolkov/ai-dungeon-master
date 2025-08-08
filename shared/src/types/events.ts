@@ -1,48 +1,64 @@
 // Загальні типи для подій у системі
 export interface EventPayload {
+    /** Ідентифікатор ігрової сесії */
     sessionId: string;
-    [key: string]: any; // Для гнучкості, але в реальному проєкті краще конкретизувати
 }
 
 export interface PlayerActionPayload extends EventPayload {
+    /** Назва або код дії (наприклад: "move", "attack") */
     action: string;
+    /** Ідентифікатор гравця */
     playerId: string;
+    /** Ідентифікатор персонажа */
     characterId: string;
-    // Додаткові дані дії гравця
+    /** Додаткові параметри дії */
+    params?: Record<string, unknown>;
 }
 
 export interface GameUpdatePayload extends EventPayload {
+    /** Текст оповіді для клієнта */
     narrative: string;
+    /** Зміни у світі, які слід застосувати */
     worldChanges?: Array<{ target: string; change: string }>;
-    characterUpdates?: Array<{ characterId: string; updates: Record<string, any> }>;
-    // Додаткові оновлення для клієнта
+    /** Оновлення атрибутів персонажів */
+    characterUpdates?: Array<{ characterId: string; updates: Record<string, unknown> }>;
 }
 
 export interface AiGenerateNarrativePayload extends EventPayload {
-    context: string; // Повний контекст для LLM
+    /** Повний контекст для LLM */
+    context: string;
 }
 
 export interface MemoryGetContextPayload extends EventPayload {
+    /** Текстовий запит для отримання контексту */
     query: string;
-    characterId?: string; // Для персоналізованого контексту
+    /** Для персоналізованого контексту */
+    characterId?: string;
 }
 
 export interface ContextResponsePayload extends EventPayload {
+    /** Агрегований контекст */
     context: string;
 }
 
 export interface NarrativeResponsePayload extends EventPayload {
+    /** Згенерований текст оповіді */
     narration: string;
+    /** Запропоновані зміни світу для подальшої оркестрації */
     worldChanges: Array<{ target: string; change: string }>;
-    toolCalls?: Array<{ name: string; arguments: Record<string, any> }>;
+    /** Виклики інструментів/функцій */
+    toolCalls?: Array<{ name: string; arguments: Record<string, unknown> }>;
 }
 
 export interface WorldChangePayload extends EventPayload {
+    /** Зміни світу, підтверджені до застосування */
     changes: Array<{ target: string; change: string }>;
 }
 
 export interface RuleDetailsPayload extends EventPayload {
+    /** Тип правила (наприклад: "spell", "combat") */
     ruleType: string;
+    /** Назва правила */
     ruleName: string;
 }
 

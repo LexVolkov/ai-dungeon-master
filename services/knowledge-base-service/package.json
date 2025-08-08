@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@shared/module": "1.0.0",
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.2.0",
     "chromadb": "^3.0.11",
